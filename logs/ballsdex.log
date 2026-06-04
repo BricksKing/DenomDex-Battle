@@ -1,0 +1,443 @@
+[2026-06-04 00:31:35] DEBUG asyncio: Using selector: EpollSelector
+[2026-06-04 00:31:35] INFO ballsdex.core.bot: OpenTelemetry tracing is enabled.
+[2026-06-04 00:31:35] INFO ballsdex: Initialized bot, connecting to Discord...
+[2026-06-04 00:31:35] INFO discord.client: logging in using static token
+[2026-06-04 00:31:35] INFO ballsdex.core.bot: Starting up with None shards...
+[2026-06-04 00:31:35] INFO discord.gateway: Shard ID 0 has connected to Gateway (Session ID: 46e49eebf0db35dffa49569ebc5efcd4).
+[2026-06-04 00:31:37] INFO ballsdex.core.bot: Successfully logged in as RZ Denomdex#3352 (1391060799857885184)!
+[2026-06-04 00:31:37] INFO ballsdex.core.bot: 2 users are set as bot owner.
+[2026-06-04 00:31:38] INFO ballsdex.core.bot: Cache loaded, summary displayed below:
+[2026-06-04 00:31:38] INFO ballsdex.core.bot: Loading packages...
+[2026-06-04 00:31:38] DEBUG ballsdex.core.utils.transformers: Inited transformer for denomball
+[2026-06-04 00:31:38] DEBUG ballsdex.core.utils.transformers: Inited transformer for special event
+[2026-06-04 00:31:38] DEBUG ballsdex.core.utils.transformers: Inited transformer for regime
+[2026-06-04 00:31:38] DEBUG ballsdex.core.utils.transformers: Inited transformer for economy
+[2026-06-04 00:31:38] DEBUG ballsdex.core.utils.transformers: Inited transformer for special event
+[2026-06-04 00:31:38] DEBUG ballsdex.core.utils.transformers: Inited transformer for denomball
+[2026-06-04 00:31:39] INFO ballsdex.packages.countryballs: Loaded 1 guild in cache.
+[2026-06-04 00:31:41] INFO ballsdex.core.bot: Packages loaded: admin, balls, guildconfig, countryballs, info, players, trade, leaderboard, collector, whitelist, battle
+[2026-06-04 00:31:41] INFO ballsdex.core.bot: Syncing global commands...
+[2026-06-04 00:31:41] INFO ballsdex.core.bot: Synced 10 global commands.
+[2026-06-04 00:32:22] WARNING ballsdex.core.bot: Expired interaction
+Traceback (most recent call last):
+  File "/root/BallsDex-DiscordBot/.venv/lib/python3.14/site-packages/discord/app_commands/commands.py", line 858, in _do_call
+    return await self._callback(self.binding, interaction, **params)  # type: ignore
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/BallsDex-DiscordBot/ballsdex/packages/info/cog.py", line 174, in help
+    await interaction.response.send_message(embed=embed)
+  File "/root/BallsDex-DiscordBot/.venv/lib/python3.14/site-packages/discord/interactions.py", line 1051, in send_message
+    response = await adapter.create_interaction_response(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "/root/BallsDex-DiscordBot/.venv/lib/python3.14/site-packages/discord/webhook/async_.py", line 224, in request
+    raise NotFound(response, data)
+discord.errors.NotFound: 404 Not Found (error code: 10062): Unknown interaction
+[2026-06-04 00:32:28] INFO ballsdex: Received Ctrl+C, stopping the bot...
+[2026-06-04 00:32:32] DEBUG asyncio: Using selector: EpollSelector
+[2026-06-04 00:32:32] INFO ballsdex.core.bot: OpenTelemetry tracing is enabled.
+[2026-06-04 00:32:32] INFO ballsdex: Initialized bot, connecting to Discord...
+[2026-06-04 00:32:32] INFO discord.client: logging in using static token
+[2026-06-04 00:32:32] INFO ballsdex.core.bot: Starting up with None shards...
+[2026-06-04 00:32:33] INFO discord.gateway: Shard ID 0 has connected to Gateway (Session ID: 0cb3f2bc365df5b793003a5649db85d2).
+[2026-06-04 00:32:35] INFO ballsdex.core.bot: Successfully logged in as RZ Denomdex#3352 (1391060799857885184)!
+[2026-06-04 00:32:35] INFO ballsdex.core.bot: 2 users are set as bot owner.
+[2026-06-04 00:32:35] INFO ballsdex.core.bot: Cache loaded, summary displayed below:
+[2026-06-04 00:32:35] INFO ballsdex.core.bot: Loading packages...
+[2026-06-04 00:32:35] DEBUG ballsdex.core.utils.transformers: Inited transformer for denomball
+[2026-06-04 00:32:35] DEBUG ballsdex.core.utils.transformers: Inited transformer for special event
+[2026-06-04 00:32:35] DEBUG ballsdex.core.utils.transformers: Inited transformer for regime
+[2026-06-04 00:32:35] DEBUG ballsdex.core.utils.transformers: Inited transformer for economy
+[2026-06-04 00:32:35] DEBUG ballsdex.core.utils.transformers: Inited transformer for special event
+[2026-06-04 00:32:35] DEBUG ballsdex.core.utils.transformers: Inited transformer for denomball
+[2026-06-04 00:32:36] INFO ballsdex.packages.countryballs: Loaded 1 guild in cache.
+[2026-06-04 00:32:38] INFO ballsdex.core.bot: Packages loaded: admin, balls, guildconfig, countryballs, info, players, trade, leaderboard, collector, whitelist, battle
+[2026-06-04 00:32:38] INFO ballsdex.core.bot: Syncing global commands...
+[2026-06-04 00:32:38] WARNING discord.http: We are being rate limited. PUT https://discord.com/api/v10/applications/1391060799857885184/commands responded with 429. Retrying in 5.18 seconds.
+[2026-06-04 00:33:44] INFO ballsdex.core.bot: Synced 10 global commands.
+[2026-06-04 00:34:48] CRITICAL ballsdex: Caught unhandled exception in <Task finished name='CommandTree-invoker' coro=<CommandTree._from_interaction.<locals>.wrapper() done, defined at /root/BallsDex-DiscordBot/.venv/lib/python3.14/site-packages/discord/app_commands/tree.py:1136> exception=NotFound('404 Not Found (error code: 10062): Unknown interaction')>:
+Task exception was never retrieved
+Traceback (most recent call last):
+  File "/root/BallsDex-DiscordBot/.venv/lib/python3.14/site-packages/discord/app_commands/commands.py", line 858, in _do_call
+    return await self._callback(self.binding, interaction, **params)  # type: ignore
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/BallsDex-DiscordBot/extra/battles/battle/package/cog.py", line 43, in duel
+    key = self.active_duels(interaction.user.id, opp.id)
+TypeError: 'dict' object is not callable
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/root/BallsDex-DiscordBot/.venv/lib/python3.14/site-packages/discord/app_commands/tree.py", line 1297, in _call
+    await command._invoke_with_namespace(interaction, namespace)
+  File "/root/BallsDex-DiscordBot/.venv/lib/python3.14/site-packages/discord/app_commands/commands.py", line 884, in _invoke_with_namespace
+    return await self._do_call(interaction, transformed_values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/BallsDex-DiscordBot/.venv/lib/python3.14/site-packages/discord/app_commands/commands.py", line 873, in _do_call
+    raise CommandInvokeError(self, e) from e
+discord.app_commands.errors.CommandInvokeError: Command 'duel' raised an exception: TypeError: 'dict' object is not callable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/root/BallsDex-DiscordBot/.venv/lib/python3.14/site-packages/discord/app_commands/tree.py", line 1138, in wrapper
+    await self._call(interaction)
+  File "/root/BallsDex-DiscordBot/ballsdex/core/bot.py", line 137, in _call
+    await super()._call(interaction)
+  File "/root/BallsDex-DiscordBot/.venv/lib/python3.14/site-packages/discord/app_commands/tree.py", line 1301, in _call
+    await self.on_error(interaction, e)
+  File "/root/BallsDex-DiscordBot/ballsdex/core/bot.py", line 590, in on_application_command_error
+    await self.on_command_error(await commands.Context.from_interaction(interaction), error)
+  File "/root/BallsDex-DiscordBot/ballsdex/core/bot.py", line 559, in on_command_error
+    await context.send(
+    ...<2 lines>...
+    )
+  File "/root/BallsDex-DiscordBot/.venv/lib/python3.14/site-packages/discord/ext/commands/context.py", line 1140, in send
+    response = await self.interaction.response.send_message(**kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/BallsDex-DiscordBot/.venv/lib/python3.14/site-packages/discord/interactions.py", line 1051, in send_message
+    response = await adapter.create_interaction_response(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "/root/BallsDex-DiscordBot/.venv/lib/python3.14/site-packages/discord/webhook/async_.py", line 224, in request
+    raise NotFound(response, data)
+discord.errors.NotFound: 404 Not Found (error code: 10062): Unknown interaction
+[2026-06-04 00:35:58] INFO ballsdex: Received Ctrl+C, stopping the bot...
+[2026-06-04 00:42:39] DEBUG asyncio: Using selector: EpollSelector
+[2026-06-04 00:42:39] INFO ballsdex.core.bot: OpenTelemetry tracing is enabled.
+[2026-06-04 00:42:39] INFO ballsdex: Initialized bot, connecting to Discord...
+[2026-06-04 00:42:39] INFO discord.client: logging in using static token
+[2026-06-04 00:42:39] INFO ballsdex.core.bot: Starting up with None shards...
+[2026-06-04 00:42:39] INFO discord.gateway: Shard ID 0 has connected to Gateway (Session ID: 0812bb34707c340b7979c3a067a8902c).
+[2026-06-04 00:42:41] INFO ballsdex.core.bot: Successfully logged in as RZ Denomdex#3352 (1391060799857885184)!
+[2026-06-04 00:42:41] INFO ballsdex.core.bot: 2 users are set as bot owner.
+[2026-06-04 00:42:42] INFO ballsdex.core.bot: Cache loaded, summary displayed below:
+[2026-06-04 00:42:42] INFO ballsdex.core.bot: Loading packages...
+[2026-06-04 00:42:42] DEBUG ballsdex.core.utils.transformers: Inited transformer for denomball
+[2026-06-04 00:42:42] DEBUG ballsdex.core.utils.transformers: Inited transformer for special event
+[2026-06-04 00:42:42] DEBUG ballsdex.core.utils.transformers: Inited transformer for regime
+[2026-06-04 00:42:42] DEBUG ballsdex.core.utils.transformers: Inited transformer for economy
+[2026-06-04 00:42:42] DEBUG ballsdex.core.utils.transformers: Inited transformer for special event
+[2026-06-04 00:42:42] DEBUG ballsdex.core.utils.transformers: Inited transformer for denomball
+[2026-06-04 00:42:43] INFO ballsdex.packages.countryballs: Loaded 1 guild in cache.
+[2026-06-04 00:42:44] INFO ballsdex.core.bot: Packages loaded: admin, balls, guildconfig, countryballs, info, players, trade, leaderboard, collector, whitelist, battle
+[2026-06-04 00:42:44] INFO ballsdex.core.bot: Syncing global commands...
+[2026-06-04 00:42:45] INFO ballsdex.core.bot: Synced 10 global commands.
+[2026-06-04 00:43:20] WARNING ballsdex.core.bot: Expired interaction
+Traceback (most recent call last):
+  File "/root/BallsDex-DiscordBot/.venv/lib/python3.14/site-packages/discord/app_commands/commands.py", line 858, in _do_call
+    return await self._callback(self.binding, interaction, **params)  # type: ignore
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/BallsDex-DiscordBot/extra/battles/battle/package/cog.py", line 50, in duel
+    await interaction.response.send_message(f"Key generated `{key}`")
+  File "/root/BallsDex-DiscordBot/.venv/lib/python3.14/site-packages/discord/interactions.py", line 1051, in send_message
+    response = await adapter.create_interaction_response(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "/root/BallsDex-DiscordBot/.venv/lib/python3.14/site-packages/discord/webhook/async_.py", line 224, in request
+    raise NotFound(response, data)
+discord.errors.NotFound: 404 Not Found (error code: 10062): Unknown interaction
+[2026-06-04 00:43:45] INFO ballsdex: Received Ctrl+C, stopping the bot...
+[2026-06-04 00:48:14] DEBUG asyncio: Using selector: EpollSelector
+[2026-06-04 00:48:14] INFO ballsdex.core.bot: OpenTelemetry tracing is enabled.
+[2026-06-04 00:48:14] INFO ballsdex: Initialized bot, connecting to Discord...
+[2026-06-04 00:48:14] INFO discord.client: logging in using static token
+[2026-06-04 00:48:14] INFO ballsdex.core.bot: Starting up with None shards...
+[2026-06-04 00:48:15] INFO discord.gateway: Shard ID 0 has connected to Gateway (Session ID: 5d0eeef3a6e772bdd397ece8b1bf8e82).
+[2026-06-04 00:48:17] INFO ballsdex.core.bot: Successfully logged in as RZ Denomdex#3352 (1391060799857885184)!
+[2026-06-04 00:48:17] INFO ballsdex.core.bot: 2 users are set as bot owner.
+[2026-06-04 00:48:17] INFO ballsdex.core.bot: Cache loaded, summary displayed below:
+[2026-06-04 00:48:17] INFO ballsdex.core.bot: Loading packages...
+[2026-06-04 00:48:18] DEBUG ballsdex.core.utils.transformers: Inited transformer for denomball
+[2026-06-04 00:48:18] DEBUG ballsdex.core.utils.transformers: Inited transformer for special event
+[2026-06-04 00:48:18] DEBUG ballsdex.core.utils.transformers: Inited transformer for regime
+[2026-06-04 00:48:18] DEBUG ballsdex.core.utils.transformers: Inited transformer for economy
+[2026-06-04 00:48:18] DEBUG ballsdex.core.utils.transformers: Inited transformer for special event
+[2026-06-04 00:48:18] DEBUG ballsdex.core.utils.transformers: Inited transformer for denomball
+[2026-06-04 00:48:18] INFO ballsdex.packages.countryballs: Loaded 1 guild in cache.
+[2026-06-04 00:48:20] INFO ballsdex.core.bot: Packages loaded: admin, balls, guildconfig, countryballs, info, players, trade, leaderboard, collector, whitelist, battle
+[2026-06-04 00:48:20] INFO ballsdex.core.bot: Syncing global commands...
+[2026-06-04 00:48:21] INFO ballsdex.core.bot: Synced 10 global commands.
+[2026-06-04 00:48:33] WARNING ballsdex.core.bot: Expired interaction
+Traceback (most recent call last):
+  File "/root/BallsDex-DiscordBot/.venv/lib/python3.14/site-packages/discord/app_commands/commands.py", line 858, in _do_call
+    return await self._callback(self.binding, interaction, **params)  # type: ignore
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/BallsDex-DiscordBot/ballsdex/packages/info/cog.py", line 174, in help
+    await interaction.response.send_message(embed=embed)
+  File "/root/BallsDex-DiscordBot/.venv/lib/python3.14/site-packages/discord/interactions.py", line 1051, in send_message
+    response = await adapter.create_interaction_response(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "/root/BallsDex-DiscordBot/.venv/lib/python3.14/site-packages/discord/webhook/async_.py", line 224, in request
+    raise NotFound(response, data)
+discord.errors.NotFound: 404 Not Found (error code: 10062): Unknown interaction
+[2026-06-04 00:49:04] INFO ballsdex: Received Ctrl+C, stopping the bot...
+[2026-06-04 00:49:36] DEBUG asyncio: Using selector: EpollSelector
+[2026-06-04 00:49:36] INFO ballsdex.core.bot: OpenTelemetry tracing is enabled.
+[2026-06-04 00:49:36] INFO ballsdex: Initialized bot, connecting to Discord...
+[2026-06-04 00:49:36] INFO discord.client: logging in using static token
+[2026-06-04 00:49:37] INFO ballsdex.core.bot: Starting up with None shards...
+[2026-06-04 00:49:37] INFO discord.gateway: Shard ID 0 has connected to Gateway (Session ID: 5ea74de68742f3fd497e9e5e5e752773).
+[2026-06-04 00:49:39] INFO ballsdex.core.bot: Successfully logged in as RZ Denomdex#3352 (1391060799857885184)!
+[2026-06-04 00:49:39] INFO ballsdex.core.bot: 2 users are set as bot owner.
+[2026-06-04 00:49:39] INFO ballsdex.core.bot: Cache loaded, summary displayed below:
+[2026-06-04 00:49:39] INFO ballsdex.core.bot: Loading packages...
+[2026-06-04 00:49:39] DEBUG ballsdex.core.utils.transformers: Inited transformer for denomball
+[2026-06-04 00:49:39] DEBUG ballsdex.core.utils.transformers: Inited transformer for special event
+[2026-06-04 00:49:39] DEBUG ballsdex.core.utils.transformers: Inited transformer for regime
+[2026-06-04 00:49:39] DEBUG ballsdex.core.utils.transformers: Inited transformer for economy
+[2026-06-04 00:49:39] DEBUG ballsdex.core.utils.transformers: Inited transformer for special event
+[2026-06-04 00:49:39] DEBUG ballsdex.core.utils.transformers: Inited transformer for denomball
+[2026-06-04 00:49:40] INFO ballsdex.packages.countryballs: Loaded 1 guild in cache.
+[2026-06-04 00:49:42] INFO ballsdex.core.bot: Packages loaded: admin, balls, guildconfig, countryballs, info, players, trade, leaderboard, collector, whitelist, battle
+[2026-06-04 00:49:42] INFO ballsdex.core.bot: Syncing global commands...
+[2026-06-04 00:50:12] WARNING ballsdex.core.bot: Expired interaction
+Traceback (most recent call last):
+  File "/root/BallsDex-DiscordBot/.venv/lib/python3.14/site-packages/discord/app_commands/commands.py", line 858, in _do_call
+    return await self._callback(self.binding, interaction, **params)  # type: ignore
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/BallsDex-DiscordBot/extra/battles/battle/package/cog.py", line 40, in duel
+    await interaction.response.send_message("I am OP, you cannot duel me you weakling.")
+  File "/root/BallsDex-DiscordBot/.venv/lib/python3.14/site-packages/discord/interactions.py", line 1051, in send_message
+    response = await adapter.create_interaction_response(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "/root/BallsDex-DiscordBot/.venv/lib/python3.14/site-packages/discord/webhook/async_.py", line 224, in request
+    raise NotFound(response, data)
+discord.errors.NotFound: 404 Not Found (error code: 10062): Unknown interaction
+[2026-06-04 00:50:21] INFO ballsdex.core.bot: Synced 10 global commands.
+[2026-06-04 00:50:22] INFO ballsdex: Received Ctrl+C, stopping the bot...
+[2026-06-04 00:51:46] DEBUG asyncio: Using selector: EpollSelector
+[2026-06-04 00:51:46] INFO ballsdex.core.bot: OpenTelemetry tracing is enabled.
+[2026-06-04 00:51:46] INFO ballsdex: Initialized bot, connecting to Discord...
+[2026-06-04 00:51:46] INFO discord.client: logging in using static token
+[2026-06-04 00:51:46] INFO ballsdex.core.bot: Starting up with None shards...
+[2026-06-04 00:51:47] INFO discord.gateway: Shard ID 0 has connected to Gateway (Session ID: e993bd8185f50d5f6bb1f8d2ec462702).
+[2026-06-04 00:51:49] INFO ballsdex.core.bot: Successfully logged in as RZ Denomdex#3352 (1391060799857885184)!
+[2026-06-04 00:51:49] INFO ballsdex.core.bot: 2 users are set as bot owner.
+[2026-06-04 00:51:49] INFO ballsdex.core.bot: Cache loaded, summary displayed below:
+[2026-06-04 00:51:49] INFO ballsdex.core.bot: Loading packages...
+[2026-06-04 00:51:49] DEBUG ballsdex.core.utils.transformers: Inited transformer for denomball
+[2026-06-04 00:51:49] DEBUG ballsdex.core.utils.transformers: Inited transformer for special event
+[2026-06-04 00:51:49] DEBUG ballsdex.core.utils.transformers: Inited transformer for regime
+[2026-06-04 00:51:49] DEBUG ballsdex.core.utils.transformers: Inited transformer for economy
+[2026-06-04 00:51:49] DEBUG ballsdex.core.utils.transformers: Inited transformer for special event
+[2026-06-04 00:51:49] DEBUG ballsdex.core.utils.transformers: Inited transformer for denomball
+[2026-06-04 00:51:50] INFO ballsdex.packages.countryballs: Loaded 1 guild in cache.
+[2026-06-04 00:51:52] INFO ballsdex.core.bot: Packages loaded: admin, balls, guildconfig, countryballs, info, players, trade, leaderboard, collector, whitelist, battle
+[2026-06-04 00:51:52] INFO ballsdex.core.bot: Syncing global commands...
+[2026-06-04 00:51:52] WARNING ballsdex.core.bot: Expired interaction
+Traceback (most recent call last):
+  File "/root/BallsDex-DiscordBot/.venv/lib/python3.14/site-packages/discord/app_commands/commands.py", line 858, in _do_call
+    return await self._callback(self.binding, interaction, **params)  # type: ignore
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/BallsDex-DiscordBot/ballsdex/packages/info/cog.py", line 174, in help
+    await interaction.response.send_message(embed=embed)
+  File "/root/BallsDex-DiscordBot/.venv/lib/python3.14/site-packages/discord/interactions.py", line 1051, in send_message
+    response = await adapter.create_interaction_response(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "/root/BallsDex-DiscordBot/.venv/lib/python3.14/site-packages/discord/webhook/async_.py", line 224, in request
+    raise NotFound(response, data)
+discord.errors.NotFound: 404 Not Found (error code: 10062): Unknown interaction
+[2026-06-04 00:51:53] INFO ballsdex.core.bot: Synced 10 global commands.
+[2026-06-04 00:53:01] WARNING ballsdex.core.bot: Expired interaction
+Traceback (most recent call last):
+  File "/root/BallsDex-DiscordBot/.venv/lib/python3.14/site-packages/discord/app_commands/commands.py", line 858, in _do_call
+    return await self._callback(self.binding, interaction, **params)  # type: ignore
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/BallsDex-DiscordBot/ballsdex/packages/info/cog.py", line 174, in help
+    await interaction.response.send_message(embed=embed)
+  File "/root/BallsDex-DiscordBot/.venv/lib/python3.14/site-packages/discord/interactions.py", line 1051, in send_message
+    response = await adapter.create_interaction_response(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "/root/BallsDex-DiscordBot/.venv/lib/python3.14/site-packages/discord/webhook/async_.py", line 224, in request
+    raise NotFound(response, data)
+discord.errors.NotFound: 404 Not Found (error code: 10062): Unknown interaction
+[2026-06-04 00:54:31] INFO ballsdex: Received Ctrl+C, stopping the bot...
+[2026-06-04 00:55:21] DEBUG asyncio: Using selector: EpollSelector
+[2026-06-04 00:55:21] INFO ballsdex.core.bot: OpenTelemetry tracing is enabled.
+[2026-06-04 00:55:21] INFO ballsdex: Initialized bot, connecting to Discord...
+[2026-06-04 00:55:21] INFO discord.client: logging in using static token
+[2026-06-04 00:55:22] INFO ballsdex.core.bot: Starting up with None shards...
+[2026-06-04 00:55:23] INFO discord.gateway: Shard ID 0 has connected to Gateway (Session ID: 62746a0fe0838109cb3a38896c0cc06b).
+[2026-06-04 00:55:25] INFO ballsdex.core.bot: Successfully logged in as RZ Denomdex#3352 (1391060799857885184)!
+[2026-06-04 00:55:25] INFO ballsdex.core.bot: 2 users are set as bot owner.
+[2026-06-04 00:55:25] INFO ballsdex.core.bot: Cache loaded, summary displayed below:
+[2026-06-04 00:55:25] INFO ballsdex.core.bot: Loading packages...
+[2026-06-04 00:55:25] DEBUG ballsdex.core.utils.transformers: Inited transformer for denomball
+[2026-06-04 00:55:25] DEBUG ballsdex.core.utils.transformers: Inited transformer for special event
+[2026-06-04 00:55:25] DEBUG ballsdex.core.utils.transformers: Inited transformer for regime
+[2026-06-04 00:55:25] DEBUG ballsdex.core.utils.transformers: Inited transformer for economy
+[2026-06-04 00:55:25] DEBUG ballsdex.core.utils.transformers: Inited transformer for special event
+[2026-06-04 00:55:25] DEBUG ballsdex.core.utils.transformers: Inited transformer for denomball
+[2026-06-04 00:55:26] INFO ballsdex.packages.countryballs: Loaded 1 guild in cache.
+[2026-06-04 00:55:30] INFO ballsdex.core.bot: Packages loaded: admin, balls, guildconfig, countryballs, info, players, trade, leaderboard, collector, whitelist, battle
+[2026-06-04 00:55:30] INFO ballsdex.core.bot: Syncing global commands...
+[2026-06-04 00:55:31] INFO ballsdex.core.bot: Synced 10 global commands.
+[2026-06-04 00:55:41] INFO ballsdex: Received Ctrl+C, stopping the bot...
+[2026-06-04 00:56:20] DEBUG asyncio: Using selector: EpollSelector
+[2026-06-04 00:56:20] INFO ballsdex.core.bot: OpenTelemetry tracing is enabled.
+[2026-06-04 00:56:20] INFO ballsdex: Initialized bot, connecting to Discord...
+[2026-06-04 00:56:20] INFO discord.client: logging in using static token
+[2026-06-04 00:56:21] INFO ballsdex.core.bot: Starting up with None shards...
+[2026-06-04 00:56:21] INFO discord.gateway: Shard ID 0 has connected to Gateway (Session ID: 2366e8d22c4b9706a76d5e0604e47184).
+[2026-06-04 00:56:23] INFO ballsdex: Received Ctrl+C, stopping the bot...
+[2026-06-04 00:56:35] DEBUG asyncio: Using selector: EpollSelector
+[2026-06-04 00:56:35] INFO ballsdex.core.bot: OpenTelemetry tracing is enabled.
+[2026-06-04 00:56:35] INFO ballsdex: Initialized bot, connecting to Discord...
+[2026-06-04 00:56:35] INFO discord.client: logging in using static token
+[2026-06-04 00:56:35] INFO ballsdex.core.bot: Starting up with None shards...
+[2026-06-04 00:56:36] INFO discord.gateway: Shard ID 0 has connected to Gateway (Session ID: 0b0e3df9d15faa206434bc17fdf75a85).
+[2026-06-04 00:56:38] INFO ballsdex.core.bot: Successfully logged in as RZ Denomdex#3352 (1391060799857885184)!
+[2026-06-04 00:56:38] INFO ballsdex.core.bot: 2 users are set as bot owner.
+[2026-06-04 00:56:38] INFO ballsdex.core.bot: Cache loaded, summary displayed below:
+[2026-06-04 00:56:38] INFO ballsdex.core.bot: Loading packages...
+[2026-06-04 00:56:38] DEBUG ballsdex.core.utils.transformers: Inited transformer for denomball
+[2026-06-04 00:56:38] DEBUG ballsdex.core.utils.transformers: Inited transformer for special event
+[2026-06-04 00:56:38] DEBUG ballsdex.core.utils.transformers: Inited transformer for regime
+[2026-06-04 00:56:38] DEBUG ballsdex.core.utils.transformers: Inited transformer for economy
+[2026-06-04 00:56:38] DEBUG ballsdex.core.utils.transformers: Inited transformer for special event
+[2026-06-04 00:56:38] DEBUG ballsdex.core.utils.transformers: Inited transformer for denomball
+[2026-06-04 00:56:39] INFO ballsdex.packages.countryballs: Loaded 1 guild in cache.
+[2026-06-04 00:56:40] ERROR ballsdex.core.bot: Failed to load package battle
+Traceback (most recent call last):
+  File "/root/BallsDex-DiscordBot/.venv/lib/python3.14/site-packages/discord/ext/commands/bot.py", line 962, in _load_from_module_spec
+    spec.loader.exec_module(lib)  # type: ignore
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "<frozen importlib._bootstrap_external>", line 759, in exec_module
+  File "<frozen importlib._bootstrap>", line 491, in _call_with_frames_removed
+  File "/root/BallsDex-DiscordBot/extra/battles/battle/package/__init__.py", line 3, in <module>
+    from .cog import BattlesCog
+  File "/root/BallsDex-DiscordBot/extra/battles/battle/package/cog.py", line 41
+    if opp.bot:
+IndentationError: unexpected indent
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/root/BallsDex-DiscordBot/ballsdex/core/bot.py", line 427, in on_ready
+    await self.load_extension(path)
+  File "/root/BallsDex-DiscordBot/.venv/lib/python3.14/site-packages/discord/ext/commands/bot.py", line 1040, in load_extension
+    await self._load_from_module_spec(spec, name)
+  File "/root/BallsDex-DiscordBot/.venv/lib/python3.14/site-packages/discord/ext/commands/bot.py", line 965, in _load_from_module_spec
+    raise errors.ExtensionFailed(key, e) from e
+discord.ext.commands.errors.ExtensionFailed: Extension 'battle.package' raised an error: IndentationError: unexpected indent (cog.py, line 41)
+[2026-06-04 00:56:40] INFO ballsdex.core.bot: Packages loaded: admin, balls, guildconfig, countryballs, info, players, trade, leaderboard, collector, whitelist
+[2026-06-04 00:56:40] INFO ballsdex.core.bot: Syncing global commands...
+[2026-06-04 00:56:41] INFO ballsdex.core.bot: Synced 9 global commands.
+[2026-06-04 00:56:47] INFO ballsdex: Received Ctrl+C, stopping the bot...
+[2026-06-04 00:58:15] DEBUG asyncio: Using selector: EpollSelector
+[2026-06-04 00:58:15] INFO ballsdex.core.bot: OpenTelemetry tracing is enabled.
+[2026-06-04 00:58:15] INFO ballsdex: Initialized bot, connecting to Discord...
+[2026-06-04 00:58:15] INFO discord.client: logging in using static token
+[2026-06-04 00:58:15] INFO ballsdex.core.bot: Starting up with None shards...
+[2026-06-04 00:58:16] INFO discord.gateway: Shard ID 0 has connected to Gateway (Session ID: f7e08119969b0b37195cde39f9282312).
+[2026-06-04 00:58:18] INFO ballsdex.core.bot: Successfully logged in as RZ Denomdex#3352 (1391060799857885184)!
+[2026-06-04 00:58:18] INFO ballsdex.core.bot: 2 users are set as bot owner.
+[2026-06-04 00:58:18] INFO ballsdex.core.bot: Cache loaded, summary displayed below:
+[2026-06-04 00:58:18] INFO ballsdex.core.bot: Loading packages...
+[2026-06-04 00:58:18] DEBUG ballsdex.core.utils.transformers: Inited transformer for denomball
+[2026-06-04 00:58:18] DEBUG ballsdex.core.utils.transformers: Inited transformer for special event
+[2026-06-04 00:58:18] DEBUG ballsdex.core.utils.transformers: Inited transformer for regime
+[2026-06-04 00:58:18] DEBUG ballsdex.core.utils.transformers: Inited transformer for economy
+[2026-06-04 00:58:18] DEBUG ballsdex.core.utils.transformers: Inited transformer for special event
+[2026-06-04 00:58:18] DEBUG ballsdex.core.utils.transformers: Inited transformer for denomball
+[2026-06-04 00:58:19] INFO ballsdex.packages.countryballs: Loaded 1 guild in cache.
+[2026-06-04 00:58:21] INFO ballsdex.core.bot: Packages loaded: admin, balls, guildconfig, countryballs, info, players, trade, leaderboard, collector, whitelist, battle
+[2026-06-04 00:58:21] INFO ballsdex.core.bot: Syncing global commands...
+[2026-06-04 00:58:22] INFO ballsdex.core.bot: Synced 10 global commands.
+[2026-06-04 00:59:10] INFO ballsdex: Received Ctrl+C, stopping the bot...
+[2026-06-04 02:41:05] DEBUG asyncio: Using selector: EpollSelector
+[2026-06-04 02:41:05] INFO ballsdex.core.bot: OpenTelemetry tracing is enabled.
+[2026-06-04 02:41:05] INFO ballsdex: Initialized bot, connecting to Discord...
+[2026-06-04 02:41:05] INFO discord.client: logging in using static token
+[2026-06-04 02:41:05] INFO ballsdex.core.bot: Starting up with None shards...
+[2026-06-04 02:41:06] INFO discord.gateway: Shard ID 0 has connected to Gateway (Session ID: 723f0856fbd44c2cc2f97a0ef05e25c8).
+[2026-06-04 02:41:08] INFO ballsdex.core.bot: Successfully logged in as RZ Denomdex#3352 (1391060799857885184)!
+[2026-06-04 02:41:08] INFO ballsdex.core.bot: 2 users are set as bot owner.
+[2026-06-04 02:41:08] INFO ballsdex.core.bot: Cache loaded, summary displayed below:
+[2026-06-04 02:41:08] INFO ballsdex.core.bot: Loading packages...
+[2026-06-04 02:41:08] DEBUG ballsdex.core.utils.transformers: Inited transformer for denomball
+[2026-06-04 02:41:08] DEBUG ballsdex.core.utils.transformers: Inited transformer for special event
+[2026-06-04 02:41:08] DEBUG ballsdex.core.utils.transformers: Inited transformer for regime
+[2026-06-04 02:41:08] DEBUG ballsdex.core.utils.transformers: Inited transformer for economy
+[2026-06-04 02:41:08] DEBUG ballsdex.core.utils.transformers: Inited transformer for special event
+[2026-06-04 02:41:08] DEBUG ballsdex.core.utils.transformers: Inited transformer for denomball
+[2026-06-04 02:41:09] INFO ballsdex.packages.countryballs: Loaded 1 guild in cache.
+[2026-06-04 02:41:10] INFO ballsdex.core.bot: Packages loaded: admin, balls, guildconfig, countryballs, info, players, trade
+[2026-06-04 02:41:10] INFO ballsdex.core.bot: Syncing global commands...
+[2026-06-04 02:41:11] INFO ballsdex.core.bot: Synced 6 global commands.
+[2026-06-04 02:41:24] WARNING ballsdex.core.bot: Expired interaction
+Traceback (most recent call last):
+  File "/root/BallsDex-DiscordBot/.venv/lib/python3.14/site-packages/discord/app_commands/commands.py", line 858, in _do_call
+    return await self._callback(self.binding, interaction, **params)  # type: ignore
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/BallsDex-DiscordBot/ballsdex/packages/info/cog.py", line 174, in help
+    await interaction.response.send_message(embed=embed)
+  File "/root/BallsDex-DiscordBot/.venv/lib/python3.14/site-packages/discord/interactions.py", line 1051, in send_message
+    response = await adapter.create_interaction_response(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "/root/BallsDex-DiscordBot/.venv/lib/python3.14/site-packages/discord/webhook/async_.py", line 224, in request
+    raise NotFound(response, data)
+discord.errors.NotFound: 404 Not Found (error code: 10062): Unknown interaction
+[2026-06-04 02:41:53] INFO ballsdex: Received Ctrl+C, stopping the bot...
+[2026-06-04 02:42:10] DEBUG asyncio: Using selector: EpollSelector
+[2026-06-04 02:42:10] INFO ballsdex.core.bot: OpenTelemetry tracing is enabled.
+[2026-06-04 02:42:10] INFO ballsdex: Initialized bot, connecting to Discord...
+[2026-06-04 02:42:10] INFO discord.client: logging in using static token
+[2026-06-04 02:42:10] INFO ballsdex.core.bot: Starting up with None shards...
+[2026-06-04 02:42:11] INFO discord.gateway: Shard ID 0 has connected to Gateway (Session ID: 35291c92748f8f8c2e5a79ad0ae85579).
+[2026-06-04 02:42:13] INFO ballsdex.core.bot: Successfully logged in as RZ Denomdex#3352 (1391060799857885184)!
+[2026-06-04 02:42:13] INFO ballsdex.core.bot: 2 users are set as bot owner.
+[2026-06-04 02:42:13] INFO ballsdex.core.bot: Cache loaded, summary displayed below:
+[2026-06-04 02:42:13] INFO ballsdex.core.bot: Loading packages...
+[2026-06-04 02:42:13] DEBUG ballsdex.core.utils.transformers: Inited transformer for denomball
+[2026-06-04 02:42:13] DEBUG ballsdex.core.utils.transformers: Inited transformer for special event
+[2026-06-04 02:42:13] DEBUG ballsdex.core.utils.transformers: Inited transformer for regime
+[2026-06-04 02:42:13] DEBUG ballsdex.core.utils.transformers: Inited transformer for economy
+[2026-06-04 02:42:13] DEBUG ballsdex.core.utils.transformers: Inited transformer for special event
+[2026-06-04 02:42:13] DEBUG ballsdex.core.utils.transformers: Inited transformer for denomball
+[2026-06-04 02:42:14] INFO ballsdex.packages.countryballs: Loaded 1 guild in cache.
+[2026-06-04 02:42:15] INFO ballsdex.core.bot: Packages loaded: admin, balls, guildconfig, countryballs, info, players, trade
+[2026-06-04 02:42:15] INFO ballsdex.core.bot: Syncing global commands...
+[2026-06-04 02:42:28] INFO ballsdex: Received Ctrl+C, stopping the bot...
+[2026-06-04 02:43:20] DEBUG asyncio: Using selector: EpollSelector
+[2026-06-04 02:43:20] INFO ballsdex.core.bot: OpenTelemetry tracing is enabled.
+[2026-06-04 02:43:20] INFO ballsdex: Initialized bot, connecting to Discord...
+[2026-06-04 02:43:20] INFO discord.client: logging in using static token
+[2026-06-04 02:43:20] INFO ballsdex.core.bot: Starting up with None shards...
+[2026-06-04 02:43:20] INFO discord.gateway: Shard ID 0 has connected to Gateway (Session ID: c1515f47a56d6b2cdff9a3a991880a93).
+[2026-06-04 02:43:22] INFO ballsdex.core.bot: Successfully logged in as RZ Denomdex#3352 (1391060799857885184)!
+[2026-06-04 02:43:22] INFO ballsdex.core.bot: 2 users are set as bot owner.
+[2026-06-04 02:43:23] INFO ballsdex.core.bot: Cache loaded, summary displayed below:
+[2026-06-04 02:43:23] INFO ballsdex.core.bot: Loading packages...
+[2026-06-04 02:43:23] DEBUG ballsdex.core.utils.transformers: Inited transformer for denomball
+[2026-06-04 02:43:23] DEBUG ballsdex.core.utils.transformers: Inited transformer for special event
+[2026-06-04 02:43:23] DEBUG ballsdex.core.utils.transformers: Inited transformer for regime
+[2026-06-04 02:43:23] DEBUG ballsdex.core.utils.transformers: Inited transformer for economy
+[2026-06-04 02:43:23] DEBUG ballsdex.core.utils.transformers: Inited transformer for special event
+[2026-06-04 02:43:23] DEBUG ballsdex.core.utils.transformers: Inited transformer for denomball
+[2026-06-04 02:43:24] INFO ballsdex.packages.countryballs: Loaded 1 guild in cache.
+[2026-06-04 02:43:25] INFO ballsdex.core.bot: Packages loaded: admin, balls, guildconfig, countryballs, info, players, trade
+[2026-06-04 02:43:25] INFO ballsdex.core.bot: Syncing global commands...
+[2026-06-04 02:43:26] INFO ballsdex.core.bot: Synced 6 global commands.
+[2026-06-04 02:43:29] INFO ballsdex: Received Ctrl+C, stopping the bot...
