@@ -46,7 +46,10 @@ class BattlesCog(commands.Cog):
             return
 
         key = self.battle_key(interaction.user.id, opp.id)
-
+        
+        if key in self.active_duels:
+            await interaction.followup.send("You are already in an active duel with this person.")
+            return
         self.active_duels[key] = {
             "player_one": interaction.user.id,
             "player_two": opp.id,
