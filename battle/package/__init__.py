@@ -1,10 +1,10 @@
 from typing import TYPE_CHECKING
 
-from .cog import BattlesCog
+from .cog import Battles
 
 if TYPE_CHECKING:
     from ballsdex.core.bot import BallsDexBot
 
 
 async def setup(bot: "BallsDexBot"):
-    await bot.add_cog(BattlesCog(bot))
+    await bot.add_cog(Battles(bot))
