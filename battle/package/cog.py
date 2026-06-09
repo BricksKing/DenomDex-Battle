@@ -42,7 +42,7 @@ class DuelConfirmation(discord.ui.View):
             item.disabled = True
 
         await interaction.response.edit_message(
-            content=f"{self.opponent.mention} accepted the duel!",
+            content=f"{self.opponent.id} accepted the duel!",
             view=self,
         )
 
@@ -60,7 +60,7 @@ class DuelConfirmation(discord.ui.View):
             item.disabled = True
 
         await interaction.response.edit_message(
-            content=f"{self.opponent.mention} declined the duel.",
+            content=f"{self.opponent.id} declined the duel.",
             view=self,
         )
 
@@ -107,7 +107,7 @@ class Battles(commands.Cog):
         view = DuelConfirmation(challenger=interaction.user, opponent=opponent, timeout=30)
 
         message = await interaction.followup.send(
-            f"{opponent.mention}, {interaction.user.mention} has challenged you to a duel.\n"
+            f"{opponent.id}, {interaction.user.mention} has challenged you to a duel.\n"
             "Do you accept?", 
             view=view,
         ) 
