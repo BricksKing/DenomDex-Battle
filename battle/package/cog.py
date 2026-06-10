@@ -83,6 +83,7 @@ class DuelConfirmation(discord.ui.View):
         button: discord.ui.Button,
     ):
         self.accepted = True
+        self.disable_all_buttons()
 
         for item in self.children:
             item.disabled = True
@@ -100,7 +101,9 @@ class DuelConfirmation(discord.ui.View):
         interaction: discord.Interaction,
         button: discord.ui.Button,
     ):
+
         self.accepted = False
+        self.disable_all_buttons()
 
         for item in self.children:
             item.disabled = True
@@ -113,6 +116,8 @@ class DuelConfirmation(discord.ui.View):
         self.stop()
 
     async def on_timeout(self):
+        self.disable_all_buttons()
+        
         for item in self.children:
             item.disabled = True
 
