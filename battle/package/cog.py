@@ -5,13 +5,59 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
+from asgiref.sync import sync_to_async
 
 from bd_models.models import BallInstance, Player
+from ..models import BattleSettings
 
 import asyncio
 
 if TYPE_CHECKING:
     from ballsdex.core.bot import BallsDexBot
+
+
+@sync_to_async
+def incoming_duels_enabled(discord_id: int) -> bool:
+    player, _ = Player.objects.get_or_create(
+        discord_id=discord_id,
+    )
+
+    settings, _ = BattleSettings.objects.get_or_create(
+        player=player,
+    )
+
+    return settings.incoming_duels
+
+@sync_to_async
+def set_incoming_duels(discord_id: int, enabled: bool) -> BattleSettings:
+    player, _ = Player.objects.get_or_create(
+        discord_id=discord_id,
+    )
+
+    settings, _ = BattleSettings.objects.get_or_create(
+        player=player,
+    )
+
+    settings.incoming_duels = enabled
+    settings.save(update_fields=["incoming_duels", "updated_at"])
+
+    return settings
+
+@sync_to_async
+def set_incoming_duels(discord_id: int, enabled: bool) -> BattleSettings:
+    player, _ = Player.objects.get_or_create(
+        discord_id=discord_id,
+    )
+
+    settings, _ = BattleSettings.objects.get_or_create(
+        player=player,
+    )
+
+    settings.incoming_duels = enabled
+    settings.save(update_fields=["incoming_duels", "updated_at"])
+
+    return settings
+
 
 class DuelConfirmation(discord.ui.View):
     def __init__(self, challenger: discord.Member, opponent: discord.Member, timeout: int=30):
@@ -86,11 +132,17 @@ class Battles(commands.Cog):
         except Player.DoesNotExist:
             return None
 
-
+    battle = app_commands.Group(
+        name="battle",
+        description="Battle commands",
+    )
     @app_commands.command(
         name = "duel",
         description = "start a battle with another user."
     )
+
+    
+
     async def duel(self, interaction: discord.Interaction, opponent: discord.Member):
         await interaction.response.defer() 
 
@@ -102,12 +154,20 @@ class Battles(commands.Cog):
             await interaction.followup.send("You cannot battle yourself.")
             return
 
+        allowed = await incoming_duels_enabled(opponent.id)
+
+        if not allowed:
+            await interaction.followup.send(
+                f"{opponent.name} is not accepting duel requests right now."
+            )
+            return
+
         key = self.battle_key(interaction.user.id, opponent.id)
 
         view = DuelConfirmation(challenger=interaction.user, opponent=opponent, timeout=30)
 
         message = await interaction.followup.send(
-            f"{opponent.id}, {interaction.user.mention} has challenged you to a duel.\n"
+            f"{opponent.name}, {interaction.user.mention} has challenged you to a duel.\n"
             "Do you accept?", 
             view=view,
         ) 
@@ -134,3 +194,27 @@ class Battles(commands.Cog):
         self.active_duels.pop(key, None)
 
         await interaction.followup.send("Key deleted")
+
+
+
+
+    @battle.command(name="settings",description="Change your battle settings.",)
+    @app_commands.describe(incoming_duels="Allow or block incoming duel requests.")
+    async def battle_settings(
+        self,
+        interaction: discord.Interaction,
+        incoming_duels: bool,
+    ):
+        await interaction.response.defer(ephemeral=True)
+
+        settings = await set_incoming_duels(
+            interaction.user.id,
+            incoming_duels,
+        )
+
+        status = "enabled" if settings.incoming_duels else "disabled"
+
+        await interaction.followup.send(
+            f"Incoming duels are now **{status}**.",
+            ephemeral=True,
+    )
