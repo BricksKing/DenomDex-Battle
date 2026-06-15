@@ -20,9 +20,33 @@ def get_ball_name(ball_instance: BallInstance) -> str:
     )
 
 
+def get_instance_display_id(instance: BallInstance) -> str:
+    # BallsDex-style BallInstance ID: integer primary key shown as uppercase hex
+    return f"{instance.pk:X}"
+
+
+def parse_instance_hex(instance_id: str) -> int | None:
+    clean_id = (
+        instance_id.strip()
+        .replace("#", "")
+        .replace(".", "")
+        .replace(" ", "")
+    )
+
+    if not clean_id:
+        return None
+
+    try:
+        return int(clean_id, 16)
+    except ValueError:
+        return None
+
 
 @sync_to_async
-def search_owned_ball_instances(discord_id: int, query: str) -> list[tuple[str, int]]:
+def search_owned_ball_instances(
+    discord_id: int,
+    query: str,
+) -> list[tuple[str, str]]:
     player = Player.objects.filter(discord_id=discord_id).first()
 
     if not player:
@@ -34,23 +58,28 @@ def search_owned_ball_instances(discord_id: int, query: str) -> list[tuple[str, 
         .order_by("id")
     )
 
+    query = query.strip()
+
     if query:
-        qs = qs.filter(ball__country__icontains=query)
+        clean_query = query.replace("#", "").replace(".", "").replace(" ", "")
+
+        parsed_id = parse_instance_hex(clean_query)
+
+        if parsed_id is not None:
+            qs = qs.filter(pk=parsed_id)
+        else:
+            qs = qs.filter(ball__country__icontains=query)
 
     results = []
 
     for instance in qs[:25]:
-        ball = instance.ball
-        ball_name = (
-            getattr(ball, "country", None)
-            or getattr(ball, "name", None)
-            or str(ball)
-        )
+        ball_name = get_ball_name(instance)
+        display_id = get_instance_display_id(instance)
 
         results.append(
             (
-                f"{ball_name} #{instance.id}",
-                instance.id,
+                f"{ball_name} #{display_id}",
+                display_id,
             )
         )
 
@@ -59,16 +88,12 @@ def search_owned_ball_instances(discord_id: int, query: str) -> list[tuple[str, 
 
 @sync_to_async
 def get_or_create_deck(discord_id: int) -> BattleDeck:
-    player, _ = Player.objects.get_or_create(
-        discord_id=discord_id,
-    )
+    player, _ = Player.objects.get_or_create(discord_id=discord_id)
 
     deck, _ = BattleDeck.objects.get_or_create(
         player=player,
         name=DECK_NAME,
-        defaults={
-            "selected": True,
-        },
+        defaults={"selected": True},
     )
 
     return deck
@@ -77,39 +102,42 @@ def get_or_create_deck(discord_id: int) -> BattleDeck:
 @sync_to_async
 def add_ball_to_deck(
     discord_id: int,
-    ball_instance_id: int,
+    ball_instance_id: str,
     slot_type: str,
     position: int,
 ) -> str:
-    player, _ = Player.objects.get_or_create(
-        discord_id=discord_id,
-    )
+    player, _ = Player.objects.get_or_create(discord_id=discord_id)
 
     deck, _ = BattleDeck.objects.get_or_create(
         player=player,
         name=DECK_NAME,
-        defaults={
-            "selected": True,
-        },
+        defaults={"selected": True},
     )
 
     if slot_type == BattleDeckSlot.ACTIVE:
         if position < 1 or position > 6:
             return "Active slots must be from 1 to 6."
-
     elif slot_type == BattleDeckSlot.BENCH:
         if position < 1 or position > 2:
             return "Bench slots must be from 1 to 2."
-
     else:
         return "Invalid slot type."
 
-    try:
-        ball_instance = BallInstance.objects.select_related("ball").get(
-            id=ball_instance_id,
+    parsed_id = parse_instance_hex(ball_instance_id)
+
+    if parsed_id is None:
+        return "Invalid ball instance ID."
+
+    ball_instance = (
+        BallInstance.objects.select_related("ball")
+        .filter(
             player=player,
+            pk=parsed_id,
         )
-    except BallInstance.DoesNotExist:
+        .first()
+    )
+
+    if not ball_instance:
         return "You do not own that ball instance."
 
     if BattleDeckSlot.objects.filter(
@@ -118,7 +146,6 @@ def add_ball_to_deck(
     ).exists():
         return "That ball is already in your deck."
 
-    # Replace whatever was already in that slot.
     BattleDeckSlot.objects.filter(
         deck=deck,
         slot_type=slot_type,
@@ -133,18 +160,20 @@ def add_ball_to_deck(
     )
 
     ball_name = get_ball_name(ball_instance)
+    display_id = get_instance_display_id(ball_instance)
 
-    return f"Added **{ball_name}** `#{ball_instance.id}` to **{slot_type} slot {position}**."
+    return (
+        f"Added **{ball_name}** `#{display_id}` "
+        f"to **{slot_type} slot {position}**."
+    )
 
 
 @sync_to_async
 def remove_ball_from_deck(
     discord_id: int,
-    ball_instance_id: int,
+    ball_instance_id: str,
 ) -> str:
-    player, _ = Player.objects.get_or_create(
-        discord_id=discord_id,
-    )
+    player, _ = Player.objects.get_or_create(discord_id=discord_id)
 
     deck = BattleDeck.objects.filter(
         player=player,
@@ -154,18 +183,41 @@ def remove_ball_from_deck(
     if not deck:
         return "You do not have a battle deck yet."
 
-    slot = BattleDeckSlot.objects.filter(
-        deck=deck,
-        ball_instance_id=ball_instance_id,
-    ).select_related("ball_instance", "ball_instance__ball").first()
+    parsed_id = parse_instance_hex(ball_instance_id)
+
+    if parsed_id is None:
+        return "Invalid ball instance ID."
+
+    ball_instance = (
+        BallInstance.objects.select_related("ball")
+        .filter(
+            player=player,
+            pk=parsed_id,
+        )
+        .first()
+    )
+
+    if not ball_instance:
+        return "You do not own that ball instance."
+
+    slot = (
+        BattleDeckSlot.objects.filter(
+            deck=deck,
+            ball_instance=ball_instance,
+        )
+        .select_related("ball_instance", "ball_instance__ball")
+        .first()
+    )
 
     if not slot:
         return "That ball is not in your deck."
 
     ball_name = get_ball_name(slot.ball_instance)
+    display_id = get_instance_display_id(slot.ball_instance)
+
     slot.delete()
 
-    return f"Removed **{ball_name}** `#{ball_instance_id}` from your deck."
+    return f"Removed **{ball_name}** `#{display_id}` from your deck."
 
 
 @sync_to_async
@@ -176,9 +228,7 @@ def swap_deck_slots(
     second_slot_type: str,
     second_position: int,
 ) -> str:
-    player, _ = Player.objects.get_or_create(
-        discord_id=discord_id,
-    )
+    player, _ = Player.objects.get_or_create(discord_id=discord_id)
 
     deck = BattleDeck.objects.filter(
         player=player,
@@ -228,7 +278,6 @@ def swap_deck_slots(
         return "Those are the same slot."
 
     with transaction.atomic():
-        # Move first slot temporarily so the unique slot constraint does not conflict.
         first.slot_type = "temp"
         first.position = 99
         first.save(update_fields=["slot_type", "position"])
@@ -246,9 +295,7 @@ def swap_deck_slots(
 
 @sync_to_async
 def get_deck_embed(discord_id: int) -> discord.Embed:
-    player, _ = Player.objects.get_or_create(
-        discord_id=discord_id,
-    )
+    player, _ = Player.objects.get_or_create(discord_id=discord_id)
 
     deck = BattleDeck.objects.filter(
         player=player,
@@ -296,9 +343,10 @@ def get_deck_embed(discord_id: int) -> discord.Embed:
             continue
 
         ball_name = get_ball_name(slot.ball_instance)
+        display_id = get_instance_display_id(slot.ball_instance)
 
         active_lines.append(
-            f"`{position}.` **{ball_name}** `#{slot.ball_instance.id}`"
+            f"`{position}.` **{ball_name}** `#{display_id}`"
         )
 
     bench_lines = []
@@ -311,9 +359,10 @@ def get_deck_embed(discord_id: int) -> discord.Embed:
             continue
 
         ball_name = get_ball_name(slot.ball_instance)
+        display_id = get_instance_display_id(slot.ball_instance)
 
         bench_lines.append(
-            f"`{position}.` **{ball_name}** `#{slot.ball_instance.id}`"
+            f"`{position}.` **{ball_name}** `#{display_id}`"
         )
 
     embed.add_field(
@@ -333,9 +382,7 @@ def get_deck_embed(discord_id: int) -> discord.Embed:
 
 @sync_to_async
 def deck_is_ready(discord_id: int) -> tuple[bool, str]:
-    player, _ = Player.objects.get_or_create(
-        discord_id=discord_id,
-    )
+    player, _ = Player.objects.get_or_create(discord_id=discord_id)
 
     deck = BattleDeck.objects.filter(
         player=player,

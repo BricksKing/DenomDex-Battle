@@ -10,7 +10,14 @@ from asgiref.sync import sync_to_async
 from bd_models.models import BallInstance, Player
 from ..models import BattleSettings, BattleDeck, BattleDeckSlot
 
-from .deck import (add_ball_to_deck, remove_ball_from_deck, swap_deck_slots, get_deck_embed, deck_is_ready,search_owned_ball_instances)
+from .deck import (
+    add_ball_to_deck,
+    remove_ball_from_deck,
+    swap_deck_slots,
+    get_deck_embed,
+    deck_is_ready,
+    search_owned_ball_instances,
+)
 
 import asyncio
 
@@ -144,13 +151,7 @@ class Battles(commands.Cog):
 
     
 
-
-
-    async def ball_instance_autocomplete(
-        self,
-        interaction: discord.Interaction,
-        current: str,
-    ) -> list[app_commands.Choice[int]]:
+    async def ball_instance_autocomplete(self,interaction: discord.Interaction,current: str,) -> list[app_commands.Choice[str]]:
         results = await search_owned_ball_instances(
             interaction.user.id,
             current,
@@ -159,7 +160,9 @@ class Battles(commands.Cog):
         return [
             app_commands.Choice(name=name[:100], value=value)
             for name, value in results
-        ] 
+        ]
+
+
 
     battle = app_commands.Group(
         name="battle",
@@ -220,7 +223,7 @@ class Battles(commands.Cog):
         view = DuelConfirmation(challenger=interaction.user, opponent=opponent, timeout=30)
 
         message = await interaction.followup.send(
-            f"{opponent.name}, {interaction.user.mention} has challenged you to a duel.\n"
+            f"{opponent.mention}, {interaction.user.mention} has challenged you to a duel.\n"
             "Do you accept?", 
             view=view,
         ) 
@@ -309,7 +312,7 @@ class Battles(commands.Cog):
     async def deck_add(
         self,
         interaction: discord.Interaction,
-        ball_instance_id: int,
+        ball_instance_id: str,
         slot_type: app_commands.Choice[str],
         position: int,
     ):
@@ -335,7 +338,7 @@ class Battles(commands.Cog):
     async def deck_remove(
         self,
         interaction: discord.Interaction,
-        ball_instance_id: int,
+        ball_instance_id: str,
     ):
         await interaction.response.defer(ephemeral=True)
 
