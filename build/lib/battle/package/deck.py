@@ -105,17 +105,8 @@ def add_ball_to_deck(
     ball_instance_id: str,
     slot_type: str,
     position: int,
-    replace: bool = False,
-) -> dict:
-    player = Player.objects.filter(
-        discord_id=discord_id,
-    ).first()
-
-    if not player:
-        return {
-            "status": "error",
-            "message": "You do not have a player account.",
-        }
+) -> str:
+    player, _ = Player.objects.get_or_create(discord_id=discord_id)
 
     deck, _ = BattleDeck.objects.get_or_create(
         player=player,
@@ -123,38 +114,22 @@ def add_ball_to_deck(
         defaults={"selected": True},
     )
 
-    # Validate position
     if slot_type == BattleDeckSlot.ACTIVE:
-        if not 1 <= position <= 6:
-            return {
-                "status": "error",
-                "message": "Active slots must be from 1 to 6.",
-            }
-
+        if position < 1 or position > 6:
+            return "Active slots must be from 1 to 6."
     elif slot_type == BattleDeckSlot.BENCH:
-        if not 1 <= position <= 2:
-            return {
-                "status": "error",
-                "message": "Bench slots must be from 1 to 2.",
-            }
-
+        if position < 1 or position > 2:
+            return "Bench slots must be from 1 to 2."
     else:
-        return {
-            "status": "error",
-            "message": "Invalid slot type.",
-        }
+        return "Invalid slot type."
 
     parsed_id = parse_instance_hex(ball_instance_id)
 
     if parsed_id is None:
-        return {
-            "status": "error",
-            "message": "Invalid ball instance ID.",
-        }
+        return "Invalid ball instance ID."
 
     ball_instance = (
-        BallInstance.objects
-        .select_related("ball")
+        BallInstance.objects.select_related("ball")
         .filter(
             player=player,
             pk=parsed_id,
@@ -163,118 +138,35 @@ def add_ball_to_deck(
     )
 
     if not ball_instance:
-        return {
-            "status": "error",
-            "message": "You do not own that ball instance.",
-        }
+        return "You do not own that ball instance."
+
+    if BattleDeckSlot.objects.filter(
+        deck=deck,
+        ball_instance=ball_instance,
+    ).exists():
+        return "That ball is already in your deck."
+
+    BattleDeckSlot.objects.filter(
+        deck=deck,
+        slot_type=slot_type,
+        position=position,
+    ).delete()
+
+    BattleDeckSlot.objects.create(
+        deck=deck,
+        ball_instance=ball_instance,
+        slot_type=slot_type,
+        position=position,
+    )
 
     ball_name = get_ball_name(ball_instance)
     display_id = get_instance_display_id(ball_instance)
 
-    # Check whether this ball is already somewhere in the deck
-    current_slot = (
-        BattleDeckSlot.objects
-        .filter(
-            deck=deck,
-            ball_instance=ball_instance,
-        )
-        .first()
+    return (
+        f"Added **{ball_name}** `#{display_id}` "
+        f"to **{slot_type} slot {position}**."
     )
 
-    # They selected the slot it's already in
-    if (
-        current_slot
-        and current_slot.slot_type == slot_type
-        and current_slot.position == position
-    ):
-        return {
-            "status": "error",
-            "message": (
-                f"**{ball_name}** `#{display_id}` is already "
-                f"in **{slot_type} slot {position}**."
-            ),
-        }
-
-    # Check target slot
-    target_slot = (
-        BattleDeckSlot.objects
-        .select_related(
-            "ball_instance",
-            "ball_instance__ball",
-        )
-        .filter(
-            deck=deck,
-            slot_type=slot_type,
-            position=position,
-        )
-        .first()
-    )
-
-    # Destination contains another ball
-    if target_slot and not replace:
-        return {
-            "status": "occupied",
-
-            "new_name": ball_name,
-            "new_id": display_id,
-
-            "old_name": get_ball_name(target_slot.ball_instance),
-            "old_id": get_instance_display_id(target_slot.ball_instance),
-
-            "slot_type": slot_type,
-            "position": position,
-
-            # Lets cog know whether we're moving an existing deck ball
-            "moving": current_slot is not None,
-        }
-
-    with transaction.atomic():
-
-        # If we're replacing somebody at the destination,
-        # remove the destination ball first.
-        if target_slot and replace:
-            target_slot.delete()
-
-        # If this ball already exists in the deck,
-        # MOVE its existing slot instead of creating another one.
-        if current_slot:
-            old_slot_type = current_slot.slot_type
-            old_position = current_slot.position
-
-            current_slot.slot_type = slot_type
-            current_slot.position = position
-
-            current_slot.save(
-                update_fields=[
-                    "slot_type",
-                    "position",
-                ]
-            )
-
-            return {
-                "status": "moved",
-                "message": (
-                    f"Moved **{ball_name}** `#{display_id}` "
-                    f"from **{old_slot_type} slot {old_position}** "
-                    f"to **{slot_type} slot {position}**."
-                ),
-            }
-
-        # Ball wasn't already in deck, create a new slot
-        BattleDeckSlot.objects.create(
-            deck=deck,
-            ball_instance=ball_instance,
-            slot_type=slot_type,
-            position=position,
-        )
-
-    return {
-        "status": "added",
-        "message": (
-            f"Added **{ball_name}** `#{display_id}` "
-            f"to **{slot_type} slot {position}**."
-        ),
-    }
 
 @sync_to_async
 def remove_ball_from_deck(
@@ -326,6 +218,79 @@ def remove_ball_from_deck(
     slot.delete()
 
     return f"Removed **{ball_name}** `#{display_id}` from your deck."
+
+
+@sync_to_async
+def swap_deck_slots(
+    discord_id: int,
+    first_slot_type: str,
+    first_position: int,
+    second_slot_type: str,
+    second_position: int,
+) -> str:
+    player, _ = Player.objects.get_or_create(discord_id=discord_id)
+
+    deck = BattleDeck.objects.filter(
+        player=player,
+        name=DECK_NAME,
+    ).first()
+
+    if not deck:
+        return "You do not have a battle deck yet."
+
+    valid_first = (
+        first_slot_type == BattleDeckSlot.ACTIVE and 1 <= first_position <= 6
+    ) or (
+        first_slot_type == BattleDeckSlot.BENCH and 1 <= first_position <= 2
+    )
+
+    valid_second = (
+        second_slot_type == BattleDeckSlot.ACTIVE and 1 <= second_position <= 6
+    ) or (
+        second_slot_type == BattleDeckSlot.BENCH and 1 <= second_position <= 2
+    )
+
+    if not valid_first:
+        return "The first slot is invalid."
+
+    if not valid_second:
+        return "The second slot is invalid."
+
+    first = BattleDeckSlot.objects.filter(
+        deck=deck,
+        slot_type=first_slot_type,
+        position=first_position,
+    ).first()
+
+    second = BattleDeckSlot.objects.filter(
+        deck=deck,
+        slot_type=second_slot_type,
+        position=second_position,
+    ).first()
+
+    if not first:
+        return "The first slot is empty."
+
+    if not second:
+        return "The second slot is empty."
+
+    if first.id == second.id:
+        return "Those are the same slot."
+
+    with transaction.atomic():
+        first.slot_type = "temp"
+        first.position = 99
+        first.save(update_fields=["slot_type", "position"])
+
+        second.slot_type = first_slot_type
+        second.position = first_position
+        second.save(update_fields=["slot_type", "position"])
+
+        first.slot_type = second_slot_type
+        first.position = second_position
+        first.save(update_fields=["slot_type", "position"])
+
+    return "Swapped those two deck slots."
 
 
 @sync_to_async
