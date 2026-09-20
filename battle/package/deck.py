@@ -8,6 +8,8 @@ from ..models import BattleDeck, BattleDeckSlot
 
 
 DECK_NAME = "Default Deck"
+ACTIVE_SLOTS = 2
+RESERVE_SLOTS = 4
 
 
 def get_ball_name(ball_instance: BallInstance) -> str:
@@ -23,6 +25,14 @@ def get_ball_name(ball_instance: BallInstance) -> str:
 def get_instance_display_id(instance: BallInstance) -> str:
     # BallsDex-style BallInstance ID: integer primary key shown as uppercase hex
     return f"{instance.pk:X}"
+
+
+def get_instance_battle_stats(instance: BallInstance) -> tuple[int, int]:
+    """Calculate the instance's effective HP and ATK, including its bonuses."""
+    ball = instance.ball
+    health = ball.health + int(ball.health * instance.health_bonus / 100)
+    attack = ball.attack + int(ball.attack * instance.attack_bonus / 100)
+    return health, attack
 
 
 def parse_instance_hex(instance_id: str) -> int | None:
@@ -125,17 +135,17 @@ def add_ball_to_deck(
 
     # Validate position
     if slot_type == BattleDeckSlot.ACTIVE:
-        if not 1 <= position <= 6:
+        if not 1 <= position <= ACTIVE_SLOTS:
             return {
                 "status": "error",
-                "message": "Active slots must be from 1 to 6.",
+                "message": f"Active slots must be from 1 to {ACTIVE_SLOTS}.",
             }
 
     elif slot_type == BattleDeckSlot.BENCH:
-        if not 1 <= position <= 2:
+        if not 1 <= position <= RESERVE_SLOTS:
             return {
                 "status": "error",
-                "message": "Bench slots must be from 1 to 2.",
+                "message": f"Reserve slots must be from 1 to {RESERVE_SLOTS}.",
             }
 
     else:
@@ -339,7 +349,7 @@ def get_deck_embed(discord_id: int) -> discord.Embed:
 
     embed = discord.Embed(
         title="Battle Deck",
-        description="6 active balls and 2 benched balls.",
+        description="2 active balls and 4 reserve balls.",
     )
 
     if not deck:
@@ -370,7 +380,7 @@ def get_deck_embed(discord_id: int) -> discord.Embed:
 
     active_lines = []
 
-    for position in range(1, 7):
+    for position in sorted(set(range(1, ACTIVE_SLOTS + 1)) | set(active_slots)):
         slot = active_slots.get(position)
 
         if not slot:
@@ -382,11 +392,12 @@ def get_deck_embed(discord_id: int) -> discord.Embed:
 
         active_lines.append(
             f"`{position}.` **{ball_name}** `#{display_id}`"
+            + (" — move to reserve or remove" if position > ACTIVE_SLOTS else "")
         )
 
     bench_lines = []
 
-    for position in range(1, 3):
+    for position in sorted(set(range(1, RESERVE_SLOTS + 1)) | set(bench_slots)):
         slot = bench_slots.get(position)
 
         if not slot:
@@ -398,6 +409,7 @@ def get_deck_embed(discord_id: int) -> discord.Embed:
 
         bench_lines.append(
             f"`{position}.` **{ball_name}** `#{display_id}`"
+            + (" — move to a valid reserve slot or remove" if position > RESERVE_SLOTS else "")
         )
 
     embed.add_field(
@@ -407,7 +419,7 @@ def get_deck_embed(discord_id: int) -> discord.Embed:
     )
 
     embed.add_field(
-        name="Bench",
+        name="Reserve",
         value="\n".join(bench_lines),
         inline=False,
     )
@@ -430,17 +442,79 @@ def deck_is_ready(discord_id: int) -> tuple[bool, str]:
     active_count = BattleDeckSlot.objects.filter(
         deck=deck,
         slot_type=BattleDeckSlot.ACTIVE,
+        ball_instance__player=player,
+        ball_instance__deleted=False,
     ).count()
 
     bench_count = BattleDeckSlot.objects.filter(
         deck=deck,
         slot_type=BattleDeckSlot.BENCH,
+        ball_instance__player=player,
+        ball_instance__deleted=False,
     ).count()
 
-    if active_count < 6:
-        return False, f"You need 6 active balls. You currently have {active_count}/6."
+    if active_count > ACTIVE_SLOTS:
+        return False, (
+            f"Your saved deck has {active_count} active balls; the new limit is {ACTIVE_SLOTS}. "
+            "Use /battle deck view to see their IDs, then /battle deck add to move "
+            f"the extra active balls into reserve slots 1–{RESERVE_SLOTS}. "
+            "If a reserve slot is occupied, confirm its replacement, "
+            "or use /battle deck remove to remove an extra ball from the deck."
+        )
 
-    if bench_count < 2:
-        return False, f"You need 2 benched balls. You currently have {bench_count}/2."
+    if active_count != ACTIVE_SLOTS:
+        return False, f"You need {ACTIVE_SLOTS} active balls. You currently have {active_count}/{ACTIVE_SLOTS}."
+
+    if bench_count != RESERVE_SLOTS:
+        return False, f"You need {RESERVE_SLOTS} reserve balls. You currently have {bench_count}/{RESERVE_SLOTS}."
 
     return True, "Deck is ready."
+
+
+@sync_to_async
+def get_battle_lineup(discord_id: int) -> list[dict]:
+    """Return active slots first, followed by reserve slots."""
+    player = Player.objects.filter(discord_id=discord_id).first()
+    if not player:
+        return []
+
+    deck = BattleDeck.objects.filter(player=player, name=DECK_NAME).first()
+    if not deck:
+        return []
+
+    slots = list(
+        BattleDeckSlot.objects.filter(
+            deck=deck,
+            ball_instance__player=player,
+            ball_instance__deleted=False,
+        )
+        .select_related("ball_instance", "ball_instance__ball")
+    )
+    active = sorted(
+        (slot for slot in slots if slot.slot_type == BattleDeckSlot.ACTIVE),
+        key=lambda slot: slot.position,
+    )
+    reserve = sorted(
+        (slot for slot in slots if slot.slot_type == BattleDeckSlot.BENCH),
+        key=lambda slot: slot.position,
+    )
+
+    # Match the readiness check: gaps in saved position numbers are harmless.
+    if len(active) != ACTIVE_SLOTS or len(reserve) != RESERVE_SLOTS:
+        return []
+
+    lineup = []
+    for slot in active + reserve:
+        instance = slot.ball_instance
+        health, attack = get_instance_battle_stats(instance)
+        lineup.append(
+            {
+                "instance_id": instance.pk,
+                "name": get_ball_name(instance),
+                "health": health,
+                "attack": attack,
+            }
+        )
+
+    return lineup
+
